@@ -31,3 +31,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define VENDOR_ID  0x05AC
 #undef PRODUCT_ID
 #define PRODUCT_ID 0x024F
+
+#define TAPPING_TERM 200
