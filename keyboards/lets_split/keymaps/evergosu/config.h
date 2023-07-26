@@ -19,17 +19,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #pragma once
-
- // place overrides here
-#define DEFAULT_LAYER_SONGS { SONG(QWERTY_SOUND) }
-
-/* Select hand configuration */
 #define MASTER_LEFT
-// #define MASTER_RIGHT
-// #define EE_HANDS
 #undef VENDOR_ID
 #define VENDOR_ID  0x05AC
 #undef PRODUCT_ID
 #define PRODUCT_ID 0x024F
 
-#define TAPPING_TERM 200
+/* #define RGBLIGHT_SLEEP */
+#define RGBLIGHT_DEFAULT_HUE 141
+#define RGBLIGHT_DEFAULT_SAT 63
+#define RGBLIGHT_DEFAULT_VAL 28
