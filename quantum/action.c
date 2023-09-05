@@ -528,6 +528,13 @@ void process_action(keyrecord_t *record, action_t action) {
                             unregister_code(action.key.code);
                         } else {
                             ac_dprintf("MODS_TAP: No tap: add_mods\n");
+#    if defined(RETRO_TAPPING) && defined(DUMMY_MOD_NEUTRALIZER_KEYCODE)
+                            // Send a dummy keycode to neutralize flashing modifiers
+                            // if the key was held and then released with no interruptions.
+                            if (retro_tapping_counter == 2) {
+                                neutralize_flashing_modifiers(get_mods());
+                            }
+#    endif
                             unregister_mods(mods);
                         }
                     }
@@ -894,7 +901,7 @@ __attribute__((weak)) void register_code(uint8_t code) {
     } else if (KC_LOCKING_CAPS_LOCK == code) {
 #    ifdef LOCKING_RESYNC_ENABLE
         // Resync: ignore if caps lock already is on
-        if (host_keyboard_leds() & (1 << USB_LED_CAPS_LOCK)) return;
+        if (host_keyboard_led_state().caps_lock) return;
 #    endif
         add_key(KC_CAPS_LOCK);
         send_keyboard_report();
@@ -904,7 +911,7 @@ __attribute__((weak)) void register_code(uint8_t code) {
 
     } else if (KC_LOCKING_NUM_LOCK == code) {
 #    ifdef LOCKING_RESYNC_ENABLE
-        if (host_keyboard_leds() & (1 << USB_LED_NUM_LOCK)) return;
+        if (host_keyboard_led_state().num_lock) return;
 #    endif
         add_key(KC_NUM_LOCK);
         send_keyboard_report();
@@ -914,7 +921,7 @@ __attribute__((weak)) void register_code(uint8_t code) {
 
     } else if (KC_LOCKING_SCROLL_LOCK == code) {
 #    ifdef LOCKING_RESYNC_ENABLE
-        if (host_keyboard_leds() & (1 << USB_LED_SCROLL_LOCK)) return;
+        if (host_keyboard_led_state().scroll_lock) return;
 #    endif
         add_key(KC_SCROLL_LOCK);
         send_keyboard_report();
@@ -964,7 +971,7 @@ __attribute__((weak)) void unregister_code(uint8_t code) {
     } else if (KC_LOCKING_CAPS_LOCK == code) {
 #    ifdef LOCKING_RESYNC_ENABLE
         // Resync: ignore if caps lock already is off
-        if (!(host_keyboard_leds() & (1 << USB_LED_CAPS_LOCK))) return;
+        if (!host_keyboard_led_state().caps_lock) return;
 #    endif
         add_key(KC_CAPS_LOCK);
         send_keyboard_report();
@@ -973,7 +980,7 @@ __attribute__((weak)) void unregister_code(uint8_t code) {
 
     } else if (KC_LOCKING_NUM_LOCK == code) {
 #    ifdef LOCKING_RESYNC_ENABLE
-        if (!(host_keyboard_leds() & (1 << USB_LED_NUM_LOCK))) return;
+        if (!host_keyboard_led_state().num_lock) return;
 #    endif
         add_key(KC_NUM_LOCK);
         send_keyboard_report();
@@ -982,7 +989,7 @@ __attribute__((weak)) void unregister_code(uint8_t code) {
 
     } else if (KC_LOCKING_SCROLL_LOCK == code) {
 #    ifdef LOCKING_RESYNC_ENABLE
-        if (!(host_keyboard_leds() & (1 << USB_LED_SCROLL_LOCK))) return;
+        if (!host_keyboard_led_state().scroll_lock) return;
 #    endif
         add_key(KC_SCROLL_LOCK);
         send_keyboard_report();
